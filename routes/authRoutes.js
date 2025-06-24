@@ -10,4 +10,6 @@ router.post('/login', login);
 // Protected route
 router.get('/profile', authMiddleware, getProfile);
 
+console.log("✅ authRoutes.js loaded");
+
 module.exports = router;

@@ -33,7 +33,10 @@ exports.register = async (req, res) => {
 
 // Login a user and return a JWT token
 exports.login = async (req, res) => {
+
+  console.log("🔐 Login route hit");
   const { email, password } = req.body;
+ 
 
   try {
     const [rows] = await db.promise().query('SELECT * FROM users WHERE email = ?', [email]);
@@ -58,6 +61,8 @@ exports.login = async (req, res) => {
 
 // Get current user's profile (protected route)
 exports.getProfile = async (req, res) => {
+
+  console.log("👤 Profile route hit");
   try {
     const userId = req.user.id;
     const [rows] = await db.promise().query('SELECT id, name, email FROM users WHERE id = ?', [userId]);
