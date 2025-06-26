@@ -1,5 +1,6 @@
 const db = require("../models/db");
 
+// Create a new transaction
 exports.createTransaction = async (req, res) => {
   const { title, amount, type } = req.body;
   const userId = req.user.id;
@@ -9,37 +10,39 @@ exports.createTransaction = async (req, res) => {
   }
 
   try {
-    await db.execute(
+    await db.query(
       "INSERT INTO transactions (user_id, title, amount, type) VALUES (?, ?, ?, ?)",
       [userId, title, amount, type]
     );
     res.status(201).json({ message: "Transaction created" });
   } catch (err) {
-    console.error("Create Transaction Error:", err);
+    console.error("❌ Create Transaction Error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+// Get all transactions of the logged-in user
 exports.getTransactions = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const [rows] = await db.execute(
+    const [rows] = await db.query(
       "SELECT * FROM transactions WHERE user_id = ? ORDER BY date DESC",
       [userId]
     );
     res.json(rows);
   } catch (err) {
-    console.error("Get Transactions Error:", err);
+    console.error("❌ Get Transactions Error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+// Delete a transaction by ID
 exports.deleteTransaction = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [result] = await db.execute(
+    const [result] = await db.query(
       "DELETE FROM transactions WHERE id = ? AND user_id = ?",
       [id, req.user.id]
     );
@@ -50,17 +53,18 @@ exports.deleteTransaction = async (req, res) => {
 
     res.json({ message: "Transaction deleted successfully" });
   } catch (err) {
-    console.error("Delete error:", err);
+    console.error("❌ Delete Transaction Error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+// Update a transaction by ID
 exports.updateTransaction = async (req, res) => {
   const { id } = req.params;
   const { title, amount, type } = req.body;
 
   try {
-    const [result] = await db.execute(
+    const [result] = await db.query(
       "UPDATE transactions SET title = ?, amount = ?, type = ? WHERE id = ? AND user_id = ?",
       [title, amount, type, id, req.user.id]
     );
@@ -71,7 +75,7 @@ exports.updateTransaction = async (req, res) => {
 
     res.json({ message: "Transaction updated successfully" });
   } catch (err) {
-    console.error("Update error:", err);
+    console.error("❌ Update Transaction Error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
