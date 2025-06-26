@@ -1,18 +1,18 @@
 const db = require("../models/db");
 
-// Create a new transaction
+// Create Transaction
 exports.createTransaction = async (req, res) => {
-  const { title, amount, type } = req.body;
+  const { title, amount, type, category } = req.body;
   const userId = req.user.id;
 
-  if (!title || !amount || !type) {
+  if (!title || !amount || !type || !category) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
     await db.query(
-      "INSERT INTO transactions (user_id, title, amount, type) VALUES (?, ?, ?, ?)",
-      [userId, title, amount, type]
+      "INSERT INTO transactions (user_id, title, amount, type, category) VALUES (?, ?, ?, ?, ?)",
+      [userId, title, amount, type, category]
     );
     res.status(201).json({ message: "Transaction created" });
   } catch (err) {
@@ -21,7 +21,7 @@ exports.createTransaction = async (req, res) => {
   }
 };
 
-// Get all transactions of the logged-in user
+// Get Transactions
 exports.getTransactions = async (req, res) => {
   const userId = req.user.id;
 
@@ -37,7 +37,7 @@ exports.getTransactions = async (req, res) => {
   }
 };
 
-// Delete a transaction by ID
+// Delete Transaction
 exports.deleteTransaction = async (req, res) => {
   const { id } = req.params;
 
@@ -53,20 +53,20 @@ exports.deleteTransaction = async (req, res) => {
 
     res.json({ message: "Transaction deleted successfully" });
   } catch (err) {
-    console.error("❌ Delete Transaction Error:", err);
+    console.error("❌ Delete error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// Update a transaction by ID
+// Update Transaction
 exports.updateTransaction = async (req, res) => {
   const { id } = req.params;
-  const { title, amount, type } = req.body;
+  const { title, amount, type, category } = req.body;
 
   try {
     const [result] = await db.query(
-      "UPDATE transactions SET title = ?, amount = ?, type = ? WHERE id = ? AND user_id = ?",
-      [title, amount, type, id, req.user.id]
+      "UPDATE transactions SET title = ?, amount = ?, type = ?, category = ? WHERE id = ? AND user_id = ?",
+      [title, amount, type, category, id, req.user.id]
     );
 
     if (result.affectedRows === 0) {
@@ -75,7 +75,7 @@ exports.updateTransaction = async (req, res) => {
 
     res.json({ message: "Transaction updated successfully" });
   } catch (err) {
-    console.error("❌ Update Transaction Error:", err);
+    console.error("❌ Update error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
