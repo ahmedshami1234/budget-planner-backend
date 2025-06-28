@@ -15,6 +15,10 @@ app.use('/api/transactions', transactionRoutes);
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
+const categoryRoutes = require("./routes/categoryRoutes");
+app.use("/api/categories", categoryRoutes);
+
+
 app.get('/', (req, res) => {
     console.log('👋 Root route hit');
     res.send('Hello from backend!');
