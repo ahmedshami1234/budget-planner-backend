@@ -6,7 +6,7 @@
 ```markdown
 # 🛠️ Budget Tracker Backend
 
-This is the backend API for the Budget Tracker app built with **Express.js** and **MySQL**. It handles authentication, transaction management, and user-specific category storage.
+This is the backend API for the Budget Tracker app built with Express.js and MySQL. It handles authentication, transaction management, and user-specific category storage.
 
 ## 🌟 Features
 
